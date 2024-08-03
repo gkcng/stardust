@@ -4,7 +4,7 @@
 
 This is a nostalgic project. Aspects of the [1984 Elite game](https://en.wikipedia.org/wiki/Elite_(video_game)) is implemented in Python.
 
-Specifically, when you run `python stardust.py`, you will be traveling through a void at some speed, but you will see:
+Specifically, when you run `python main.py`, you will be traveling through a void at some speed, but you will see:
 - Small particles of dust (or star dusts) out there in space which give rise to the immersive feeling that we are flying through space.
 - All 4 views Front, Rear, Left, Right, use KEYS `1`, `2`, `3`, and `4` respectively.
 - Roll, Pitch, and Speed adjustments.
@@ -16,3 +16,5 @@ Implementation is based on information from the [Fully documented source code fo
 
 The project uses pygame.
 
+# Note
+Set `$ export OPENBLAS_NUM_THREADS=1` to avoid [high CPU usage from numpy](https://github.com/numpy/numpy/issues/26096). 

@@ -57,55 +57,43 @@ def display_help(screen, font, center):
         text_rect = text_rect.move(0, -(len(usages)/2*36)+i*36)
         screen.blit(text, text_rect)
 
+def create_cubes(cubes):
+    # The code quite comfortably maintain 132 cubes which is 1056 points @ 30 FPS
+    # 90 cubes which is 720 points 
+    left=-9
+    front=1.5
+    step=2
+    for i in range(10):
+        x = i*step+left
+        for j in range(11):
+            z = j*step+front
+            cubes.append( UnitCube(x, 0.5, z) )
+    return cubes
+
 def main():
 
     pygame.init()
     pygame.display.set_caption("Stardust")
 
     screen   = pygame.display.set_mode((WIDTH, HEIGHT))
-
     font     = pygame.font.SysFont('Courier New, courier, monospace', 20, bold=True)
     fps      = 30
 
     controls = FlightControls(fps)
     paint    = Renderer(screen, WIDTH/2, HEIGHT/2)
 
+    dt=0
+    help_screen = False
+    delta = Delta()
+
+    cubes = create_cubes([])
+
+    key_mappings = {
+    }
+
     running = True
     clock = pygame.time.Clock()
-    text = font.render('fps: ?', False, (255, 255, 0))
-
     pygame.event.clear()
-
-    cubes = []
-
-    def create_cubes():
-        # The code quite comfortably maintain 132 cubes which is 1056 points @ 30 FPS
-        # 90 cubes which is 720 points 
-        left=-9
-        front=1.5
-        step=2
-        for i in range(10):
-            x = i*step+left
-            for j in range(11):
-                z = j*step+front
-                cubes.append( UnitCube(x, 0.5, z) )
-    create_cubes()
-    # cubes.extend( [UnitCube(0.0,0.0,1.0),
-    #               UnitCube(5.0,0.0,1.0),
-    #               UnitCube(0.0,5.0,1.0),
-    #               UnitCube(0.0,0.0,5.0)
-    #               ])
-    # cubes.extend( [ UnitCube(0.0,0.0,1.5) ] )
-
-    delta = Delta()
-    
-    key_mappings = {
-        
-    }
- 
-    dt=0
-
-    help_screen = False
     
     # main loop
     while running:
@@ -158,11 +146,7 @@ def main():
             
             dt = (dt + 1) % 2
 
-        # pygame.display.update()        
         pygame.display.flip()        
         
 if __name__ == '__main__':
-    # import cProfile
-    # import re
-    # cProfile.run('main()')    
     main()

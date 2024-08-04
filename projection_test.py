@@ -41,6 +41,22 @@ def handle_keys(keys, d):
     if keys[pygame.K_LEFTBRACKET  ]:
         d.set_delta(y=-5)
 
+def display_help(screen, font, center):
+    usages = [
+        "UP, DOWN, LEFT, RIGHT - Move",
+        "s / x - Pitch",
+        "< / > - Roll",
+        "[ / ] - Yaw",
+        "h - Help toggle"
+    ]
+
+    for i in range(len(usages)):
+        msg = usages[i]
+        text = font.render(msg, True, (255, 255, 0))
+        text_rect = text.get_rect(center=center)
+        text_rect = text_rect.move(0, -(len(usages)/2*36)+i*36)
+        screen.blit(text, text_rect)
+
 def main():
 
     pygame.init()
@@ -52,7 +68,7 @@ def main():
     fps      = 30
 
     controls = FlightControls(fps)
-    paint    = Renderer(screen, 400, 300)
+    paint    = Renderer(screen, WIDTH/2, HEIGHT/2)
 
     running = True
     clock = pygame.time.Clock()
@@ -84,10 +100,13 @@ def main():
     delta = Delta()
     
     key_mappings = {
+        
     }
  
     dt=0
 
+    help_screen = False
+    
     # main loop
     while running:
 
@@ -97,42 +116,50 @@ def main():
                 running = False
                 continue
             elif event.type == pygame.KEYDOWN:
-                if event.key in key_mappings:
+                if event.key == pygame.K_h:
+                    help_screen = not help_screen
+                elif event.key in key_mappings:
                     target_obj = key_mappings[event.key][0]
                     func = key_mappings[event.key][1]
                     func(target_obj)
-                    
-        # Handle keys pressed
-        if dt == 0:
-            handle_keys(pygame.key.get_pressed(), delta)
-            # delta.set_delta(y=+2)
-            # Update states
-            if delta.changed:
-                paint.camera.set_camera_delta( d=delta )
-                delta.reset()
-        
-        #
-        # Screen update cycle
-        #
-        screen.fill((0, 0, 0))
 
-        paint.begin_draw()
-        for cube in cubes:
-            cube.update()
-            cube.draw(paint)
-        paint.end_draw()
+        if help_screen:
+            screen.fill((0, 0, 0))            
+            display_help(screen, font, (WIDTH/2, HEIGHT/2))
+            clock.tick(5)            
+        else:
+            # Handle keys pressed
+            if dt == 0:
+                handle_keys(pygame.key.get_pressed(), delta)
+                # delta.set_delta(y=+2)
+                # Update states
+                if delta.changed:
+                    paint.camera.set_camera_delta( d=delta )
+                    delta.reset()
+            
+            #
+            # Screen update cycle
+            #
+            screen.fill((0, 0, 0))
+    
+            paint.begin_draw()
+            for cube in cubes:
+                cube.update()
+                cube.draw(paint)
+            paint.end_draw()
+    
+            # it makes sense to throttle the framerate (which is what the 30 in
+            # clock.tick(30) achieves) because it is pointless to have a framerate
+            # higher than the screen refresh rate (which is usually 60). To run at
+            # full speed, remove the 30
+            clock.tick(30)
+            text = font.render(f'fps: {clock.get_fps():.1f}; h - HELP', True, (255, 255, 0))
+            screen.blit(text, (10, 10))
+            
+            dt = (dt + 1) % 2
 
-        # it makes sense to throttle the framerate (which is what the 30 in
-        # clock.tick(30) achieves) because it is pointless to have a framerate
-        # higher than the screen refresh rate (which is usually 60). To run at
-        # full speed, remove the 30
-        clock.tick(30)
-        text = font.render(f'fps: {clock.get_fps():.1f}', True, (255, 255, 0))
-        screen.blit(text, (10, 10))
-        
         # pygame.display.update()        
-        pygame.display.flip()
-        dt = (dt + 1) % 2
+        pygame.display.flip()        
         
 if __name__ == '__main__':
     # import cProfile

@@ -2,6 +2,7 @@ import math
 import numpy as np
 
 DEGREES = 0.0174533
+epsilon=1.0e-6
 sin = math.sin
 cos = math.cos
 
@@ -59,7 +60,7 @@ def matmul(m1, m2):
     # return _matmul_long(m1, m2) # This is definiely slower, dropping framerate from 30 to 13
     return np.matmul(m1, m2)
   
-def rot_matrix(r=0, p=0, y=0, xo=0, yo=0, zo=0):
+def rot_matrix_short(r=0, p=0, y=0, xo=0, yo=0, zo=0):
     r *= DEGREES
     p *= DEGREES
     y *= DEGREES
@@ -83,7 +84,7 @@ def _matmul_long(m1, m2):
                 
     return m3.squeeze() if columns == 1 else m3
 
-def _rot_matrix_long(r=0, p=0, y=0, xo=0, yo=0, zo=0):
+def rot_matrix(r=0, p=0, y=0, xo=0, yo=0, zo=0):
 
     r *= DEGREES
     p *= DEGREES
@@ -97,7 +98,7 @@ def _rot_matrix_long(r=0, p=0, y=0, xo=0, yo=0, zo=0):
         [     1,       0, 0, xo],
         [     0,       1, 0, yo],
         [     0,       0, 1, zo],
-        [     0,       0, 0, 1],
+        [     0,       0, 0,  1],
     ])
     
     # Mvworld = T.R.S = Mvmodel

@@ -9,11 +9,11 @@ class Camera():
 
         self.camera = c = {
             'roll'     : 0, # degrees,
-            'pitch'    : 30, # degrees,
+            'pitch'    : 55, # degrees,
             'yaw'      : 0, # degrees,
             'x_offset' : 0,
-            'y_offset' : 3, # 0.5,
-            'z_offset' : 2, # 13.5
+            'y_offset' : 14.3, # 0.5,
+            'z_offset' : -1.3, # 13.5
         }
         self.camera_matrix = None
         
@@ -29,11 +29,9 @@ class Camera():
         """
         # V = = C−1 - inverse
         self.camera_matrix = delta_matrix if self.camera_matrix is None else matmul(self.camera_matrix, delta_matrix)
-
         # Inverse
         # linalg inv is very CPU intensive unless setting this in the environment: $ export OPENBLAS_NUM_THREADS=1        
-        self.view_matrix   = inv(self.camera_matrix) 
-
+        self.view_matrix   = inv(self.camera_matrix) # inv(self.camera_matrix) 
         self.camera_changed = True       
 
 
@@ -81,7 +79,7 @@ class Delta():
     def reset(self):
         self.r_delta  = 0
         self.p_delta  = 0
-        self.y_delta   = 0
+        self.y_delta  = 0
         self.xo_delta = 0
         self.yo_delta = 0
         self.zo_delta = 0

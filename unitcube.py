@@ -3,6 +3,7 @@ import numpy as np
 from matrix import *
 
 class UnitCube():
+    
     vertices = np_array([
         [ -0.5, -0.5, -0.5, 1],
         [  0.5,  0.5, -0.5, 1],
@@ -37,10 +38,11 @@ class UnitCube():
 
     def __init__(self, x, y, z):
         self.model_matrix = rot_matrix(xo=x, yo=y, zo=z)
+        self.rotate = [ np.random.randint(0,5) for i in range(3) ]
 
     def update(self):
-        deg = np.random.uniform(1,5) # A single value
-        self.model_matrix = matmul(self.model_matrix, rot_matrix(r=deg,p=deg,y=0))
+        self.model_matrix = matmul(self.model_matrix, rot_matrix(r=self.rotate[0],p=self.rotate[1],y=self.rotate[2]))
+        return
     
     def draw(self, painter):
         painter.push_matrix(self.model_matrix, "Model(Cube)")

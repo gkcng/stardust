@@ -10,6 +10,7 @@ from controls import FlightControls
 from renderer import Renderer
 from unitcube import UnitCube
 from camera   import Delta, Camera
+from matrix import *
 
 WIDTH =800
 HEIGHT=600
@@ -62,37 +63,31 @@ def main():
     cubes = []
 
     def create_cubes():
-        left=-8
+        # The code quite comfortably maintain 132 cubes which is 1056 points @ 30 FPS
+        # 90 cubes which is 720 points 
+        left=-9
         front=1.5
         step=2
-        for i in range(9):
+        for i in range(10):
             x = i*step+left
-            for j in range(10):
+            for j in range(11):
                 z = j*step+front
                 cubes.append( UnitCube(x, 0.5, z) )
     create_cubes()
-    # cubes.extend( [ UnitCube(0.0,0.0,0.0), UnitCube(5.0,0.0,0.0), UnitCube(0.0,5.0,0.0), UnitCube(0.0,0.0,5.0) ])
-    # cubes.extend( [ UnitCube(0.0,0.0,1.0) ] )
+    # cubes.extend( [UnitCube(0.0,0.0,1.0),
+    #               UnitCube(5.0,0.0,1.0),
+    #               UnitCube(0.0,5.0,1.0),
+    #               UnitCube(0.0,0.0,5.0)
+    #               ])
+    # cubes.extend( [ UnitCube(0.0,0.0,1.5) ] )
 
     delta = Delta()
     
     key_mappings = {
-#        pygame.K_UP:     [ delta, lambda d: d.set_delta(yo=+0.1) ],
-#        pygame.K_DOWN:   [ delta, lambda d: d.set_delta(yo=-0.1) ],
-#        pygame.K_RIGHT:  [ delta, lambda d: d.set_delta(xo=+0.1) ],
-#        pygame.K_LEFT:   [ delta, lambda d: d.set_delta(xo=-0.1) ],
-#        pygame.K_SPACE:  [ delta, lambda d: d.set_delta(zo=+0.1) ],
-#        pygame.K_SLASH:  [ delta, lambda d: d.set_delta(zo=-0.1) ],
-#        pygame.K_COMMA:  [ delta, lambda d: d.set_delta(r=+5) ],
-#        pygame.K_PERIOD: [ delta, lambda d: d.set_delta(r=-5) ],
-#        pygame.K_s:      [ delta, lambda d: d.set_delta(p=+5) ],
-#        pygame.K_x:      [ delta, lambda d: d.set_delta(p=-5) ],
-#        pygame.K_RIGHTBRACKET: [ delta, lambda d: d.set_delta(y=+5) ],
-#        pygame.K_LEFTBRACKET:  [ delta, lambda d: d.set_delta(y=-5) ],
     }
  
     dt=0
-    
+
     # main loop
     while running:
 
@@ -143,4 +138,4 @@ if __name__ == '__main__':
     # import cProfile
     # import re
     # cProfile.run('main()')    
-    # main()
+    main()
